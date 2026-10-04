@@ -19,5 +19,9 @@ export const routes: Routes = [
   {
     path: 'transferencias',
     loadComponent: () => import('./transferencias/pages/transferencia-form/transferencia-form.component').then(m => m.TransferenciaFormComponent)
+  },
+  {
+    path: 'historial_transferencias',
+    loadComponent: () => import('./transferencias/historial/pages/historial/historial.component').then(m => m.HistorialComponent)
   }
 ];

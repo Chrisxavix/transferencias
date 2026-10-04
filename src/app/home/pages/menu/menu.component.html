@@ -12,7 +12,7 @@
         <div class="icon-container">
           <mat-icon>swap_horiz</mat-icon>
         </div>
-        <h2>Transferencias</h2>
+        <h2> Realizar Transferencias</h2>
         <p>
           Realiza transferencias entre cuentas de forma rápida y segura.
         </p>
@@ -45,5 +45,29 @@
         </button>
       </mat-card-content>
     </mat-card>
+
+    <!-- Historial -->
+    <mat-card class="option-card">
+      <mat-card-content>
+        <div class="icon-container">
+          <mat-icon>history</mat-icon>
+        </div>
+
+        <h2>Historial</h2>
+
+        <p>
+          Consulta el historial de transferencias realizadas.
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/historial_transferencias">
+          <mat-icon>arrow_forward</mat-icon>
+          Ingresar
+        </button>
+      </mat-card-content>
+    </mat-card>
+
   </div>
 </div>
