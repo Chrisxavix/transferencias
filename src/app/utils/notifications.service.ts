@@ -26,7 +26,7 @@ export class NotificationsService {
       `✕ ${message}`,
       'Cerrar',
       {
-        duration: 4000,
+        duration: 8000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
         panelClass: ['toast-error']

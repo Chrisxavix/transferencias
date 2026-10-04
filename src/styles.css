@@ -16,3 +16,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-radius: 10px !important;
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2) !important;
 }
+
+.toast-error {
+  --mdc-snackbar-container-color: #ffebee;
+  --mdc-snackbar-supporting-text-color: #b71c1c;
+  --mat-snack-bar-button-color: #c62828;
+}
+
+.toast-error .mdc-snackbar__surface {
+  border: 1px solid #ef9a9a !important;
+  border-left: 5px solid #c62828 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2) !important;
+}

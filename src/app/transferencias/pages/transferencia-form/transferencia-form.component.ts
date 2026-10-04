@@ -12,7 +12,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsService } from '../../../utils/notifications.service';
 import { Router } from '@angular/router';
 import { CuentasTodasService } from '../../services/cuentas_todas.service';
-import { CTL } from '../../interfaces/CuentasTodasRespuesta';
+import { CTL } from '../../interfaces/cuentasTodasRespuesta';
+import { TransaccionSolicitud } from '../../interfaces/transaccionSolicitud';
+import { TransaccionService } from '../../services/transaccion.service';
+import { TransaccionError } from '../../interfaces/transaccionRespuesta';
 
 @Component({
   selector: 'app-transferencia-form',
@@ -32,12 +35,11 @@ import { CTL } from '../../interfaces/CuentasTodasRespuesta';
 })
 export class TransferenciaFormComponent implements OnInit {
 
-  // cuentas: transferencia[] = leadsMock;
-
   cuentas: CTL[] = [];
 
   transferenciaForm: FormGroup;
   private cuentasTodasService = inject(CuentasTodasService);
+  private transaccionService = inject(TransaccionService);
 
   constructor(
     private fb: FormBuilder,
@@ -107,21 +109,6 @@ export class TransferenciaFormComponent implements OnInit {
     return null;
   }
 
-  enviarTransferencia(): void {
-    if (this.transferenciaForm.invalid) {
-      this.transferenciaForm.markAllAsTouched();
-      return;
-    }
-    const transferencia = this.transferenciaForm.value;
-    console.log('Transferencia:', transferencia);
-    this.notificationService.success(
-      'Transferencia realizada correctamente'
-    );
-    this.router.navigate(['/home']);
-
-    // Aquí posteriormente llamarías al backend
-  }
-
   obtenerTodasCuentas(): void {
     this.cuentasTodasService.obtenerTodasCuentas().subscribe({
       next: (respuesta) => {
@@ -130,6 +117,40 @@ export class TransferenciaFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener cuentas:', error);
+      }
+    });
+  }
+
+  enviarTransferencia(): void {
+    if (this.transferenciaForm.invalid) {
+      this.transferenciaForm.markAllAsTouched();
+      return;
+    }
+    const form = this.transferenciaForm.getRawValue();
+    const request: TransaccionSolicitud = {
+      userapp: 'WEB_ANGULAR',
+      process: 'PROC-8921378',
+      channel: 'WEB',
+      operation: 'CREAR_CUENTA',
+      ip: '192.168.1.50',
+      ctl: {
+        numeroCuentaOrigen: form.cuentaOrigen!,
+        numeroCuentaDestino: form.cuentaDestino!,
+        monto: Number(form.monto),
+        observacion: form.observacion!
+      }
+    };
+    console.log("Maggot: ", request)
+    this.transaccionService.crearTransferencia(request).subscribe({
+      next: (respuesta) => {
+        console.log('Transferencia realizada:', respuesta);
+        this.notificationService.success(respuesta.message);
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.error('Error en transferencia:', error);
+        const respuestaError = error.error as TransaccionError;
+        this.notificationService.error(respuestaError.mensaje);
       }
     });
   }
