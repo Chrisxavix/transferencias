@@ -1,7 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import { transferencia } from '../../../cuentas/dashboard/interfaces/transferencia';
-import { leadsMock } from '../../../cuentas/dashboard/mock/transferencias';
 import {  MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { NotificationsService } from '../../../utils/notifications.service';
+import { NotificationsService } from '../../../../utils/notifications.service';
 import { Router } from '@angular/router';
 import { CuentasTodasService } from '../../services/cuentas_todas.service';
 import { CTL } from '../../interfaces/cuentasTodasRespuesta';
