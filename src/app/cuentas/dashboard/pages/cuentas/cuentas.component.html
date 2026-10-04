@@ -8,9 +8,7 @@
   </div>
 
   <div class="table-card">
-
     <table mat-table [dataSource]="dataSource" matSort>
-
       <!-- Número de cuenta -->
       <ng-container matColumnDef="numeroCuenta">
         <th mat-header-cell *matHeaderCellDef>
@@ -24,7 +22,6 @@
         </td>
       </ng-container>
 
-
       <!-- Titular -->
       <ng-container matColumnDef="titular">
         <th mat-header-cell *matHeaderCellDef>
@@ -32,10 +29,9 @@
         </th>
 
         <td mat-cell *matCellDef="let cuenta">
-          {{ cuenta.titular }}
+          {{ cuenta.identificacion }} - {{ cuenta.primerNombre }} {{ cuenta.apellidoPaterno }}
         </td>
       </ng-container>
-
 
       <!-- Tipo de cuenta -->
       <ng-container matColumnDef="tipoCuenta">
@@ -50,20 +46,18 @@
         </td>
       </ng-container>
 
-
       <!-- Saldo -->
-      <ng-container matColumnDef="saldoActual">
+      <ng-container matColumnDef="saldo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Saldo actual
         </th>
 
         <td mat-cell *matCellDef="let cuenta">
           <span class="saldo">
-            {{ cuenta.saldoActual | currency }}
+            {{ cuenta.saldo | currency }}
           </span>
         </td>
       </ng-container>
-
 
       <!-- Estado -->
       <ng-container matColumnDef="estado">
@@ -81,7 +75,6 @@
         </td>
       </ng-container>
 
-
       <tr
         mat-header-row
         *matHeaderRowDef="displayedColumns">
@@ -91,13 +84,11 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns;">
       </tr>
-
     </table>
-
 
     <mat-paginator
       [pageSizeOptions]="[5, 10, 20]"
-      [pageSize]="5"
+      [pageSize]="10"
       showFirstLastButtons>
     </mat-paginator>
 
