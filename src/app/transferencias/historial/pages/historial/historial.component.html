@@ -1,1 +1,137 @@
-<p>historial works!</p>
+<div class="historial-container">
+  <div class="historial-header">
+    <div>
+      <h2>Historial de movimientos</h2>
+      <p>Consulta el detalle de tus transferencias y movimientos bancarios</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Número de movimiento -->
+      <ng-container matColumnDef="numeroMovimiento">
+        <th mat-header-cell *matHeaderCellDef>
+          N.º movimiento
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          <span class="numero-movimiento">
+            {{ movimiento.numeroMovimiento }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Monto -->
+      <ng-container matColumnDef="monto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Monto
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          <span class="monto">
+            {{ movimiento.monto | currency:'USD':'symbol':'1.2-2' }}
+          </span>
+        </td>
+      </ng-container>
+
+
+      <!-- Cuenta origen -->
+      <ng-container matColumnDef="numeroCuentaOrigen">
+        <th mat-header-cell *matHeaderCellDef>
+          Cuenta origen
+        </th>
+        <td mat-cell *matCellDef="let movimiento">
+          {{ movimiento.numeroCuentaOrigen }}
+        </td>
+      </ng-container>
+
+
+      <!-- Cuenta destino -->
+      <ng-container matColumnDef="numeroCuentaDestino">
+        <th mat-header-cell *matHeaderCellDef>
+          Cuenta destino
+        </th>
+        <td mat-cell *matCellDef="let movimiento">
+          {{ movimiento.numeroCuentaDestino }}
+        </td>
+      </ng-container>
+
+
+
+      <!-- Observación -->
+      <ng-container matColumnDef="observacion">
+        <th mat-header-cell *matHeaderCellDef>
+          Observación
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          {{ movimiento.observacion || 'Sin observación' }}
+        </td>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>
+          Estado
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          <span
+            class="estado"
+            [class.completada]="movimiento.estado === 'COMPLETADA'"
+            [class.pendiente]="movimiento.estado === 'PENDIENTE'"
+            [class.rechazada]="movimiento.estado === 'RECHAZADA'"
+            [class.sospechosa]="movimiento.estado === 'SOSPECHOSA'">
+            {{ movimiento.estado }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Fecha -->
+      <ng-container matColumnDef="fechaCreacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Fecha
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          {{ movimiento.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}
+        </td>
+      </ng-container>
+
+      <!-- Motivo -->
+      <!-- <ng-container matColumnDef="motivoEstado">
+        <th mat-header-cell *matHeaderCellDef>
+          Motivo
+        </th>
+
+        <td mat-cell *matCellDef="let movimiento">
+          {{ movimiento.motivoEstado || '-' }}
+        </td>
+      </ng-container> -->
+
+      <!-- Header -->
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns">
+      </tr>
+
+      <!-- Filas -->
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+
+    </table>
+
+    <mat-paginator
+      [length]="totalElements"
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="size"
+      showFirstLastButtons>
+    </mat-paginator>
+
+  </div>
+
+</div>
