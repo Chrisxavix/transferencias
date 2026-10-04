@@ -13,7 +13,7 @@ export const routes: Routes = [
   {
     path: 'cuentas',
     loadComponent: () =>
-      import('./transferencias/dashboard/pages/cuentas/cuentas.component').then(m => m.CuentasComponent)
+      import('./cuentas/dashboard/pages/cuentas/cuentas.component').then(m => m.CuentasComponent)
   }
   // {
   //   path: 'cuentas',

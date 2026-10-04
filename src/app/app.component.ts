@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CuentasComponent } from './transferencias/dashboard/pages/cuentas/cuentas.component';
+import { CuentasComponent } from './cuentas/dashboard/pages/cuentas/cuentas.component';
 import { MenuComponent } from './home/pages/menu/menu.component';
 import { RouterModule } from '@angular/router';
 
