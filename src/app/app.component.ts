@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CuentasComponent } from './transferencias/dashboard/pages/cuentas/cuentas.component';
+import { MenuComponent } from './home/pages/menu/menu.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [CuentasComponent, MenuComponent, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'transferencias';
+
 }
