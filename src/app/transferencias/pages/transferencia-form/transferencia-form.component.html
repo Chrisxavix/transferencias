@@ -1,7 +1,6 @@
 <div class="transferencia-container">
 
   <mat-card>
-
     <mat-card-header>
       <mat-card-title>Nueva transferencia</mat-card-title>
       <mat-card-subtitle>
@@ -10,30 +9,23 @@
     </mat-card-header>
 
     <mat-card-content>
-
       <form
         [formGroup]="transferenciaForm"
         (ngSubmit)="enviarTransferencia()"
       >
-
         <!-- Cuenta origen -->
         <mat-form-field appearance="outline" class="full-width">
-
           <mat-label>Cuenta origen</mat-label>
-
           <mat-select formControlName="cuentaOrigen">
-
             <mat-option
               *ngFor="let cuenta of cuentas"
               [value]="cuenta.numeroCuenta"
               [disabled]="cuenta.estado === 'INACTIVA'"
             >
-
               {{ cuenta.numeroCuenta }} -
-              {{ cuenta.titular }}
-
+              {{ cuenta.nombreLegal }} -
+              Saldo $ {{ cuenta.saldo }}
             </mat-option>
-
           </mat-select>
 
           <mat-error
@@ -43,40 +35,28 @@
           >
             La cuenta origen es requerida
           </mat-error>
-
         </mat-form-field>
-
 
         <!-- Cuenta destino -->
         <mat-form-field appearance="outline" class="full-width">
-
           <mat-label>Cuenta destino</mat-label>
-
           <mat-select formControlName="cuentaDestino">
-
             <mat-option
               *ngFor="let cuenta of cuentas"
               [value]="cuenta.numeroCuenta"
               [disabled]="cuenta.estado === 'INACTIVA'"
             >
-
               {{ cuenta.numeroCuenta }} -
-              {{ cuenta.titular }}
-
+              {{ cuenta.nombreLegal }}
             </mat-option>
-
           </mat-select>
 
           <mat-error
-            *ngIf="
-              transferenciaForm.get('cuentaDestino')?.hasError('required')
-            "
+            *ngIf="transferenciaForm.get('cuentaDestino')?.hasError('required')"
           >
             La cuenta destino es requerida
           </mat-error>
-
         </mat-form-field>
-
 
         <!-- Error cuentas iguales -->
         <mat-error
@@ -90,12 +70,9 @@
           La cuenta origen debe ser diferente a la cuenta destino
         </mat-error>
 
-
         <!-- Monto -->
         <mat-form-field appearance="outline" class="full-width">
-
           <mat-label>Monto</mat-label>
-
           <input
             matInput
             type="number"
@@ -108,50 +85,36 @@
           <span matTextPrefix>$&nbsp;</span>
 
           <mat-error
-            *ngIf="
-              transferenciaForm.get('monto')?.hasError('required')
-            "
+            *ngIf="transferenciaForm.get('monto')?.hasError('required')"
           >
             El monto es requerido
           </mat-error>
 
           <mat-error
-            *ngIf="
-              transferenciaForm.get('monto')?.hasError('pattern')
-            "
-          >
-            El monto debe ser numérico
-          </mat-error>
-
-          <mat-error
-            *ngIf="
-              transferenciaForm.get('monto')?.hasError('min')
-            "
+            *ngIf="transferenciaForm.get('monto')?.hasError('min')"
           >
             El monto debe ser mayor a cero
           </mat-error>
 
+          <mat-error
+            *ngIf="transferenciaForm.get('monto')?.hasError('max')"
+          >
+            El monto no puede superar el saldo disponible de
+            ${{ obtenerSaldoCuentaOrigen() | number:'1.2-2' }}
+          </mat-error>
         </mat-form-field>
-
 
         <!-- Botón -->
         <div class="acciones">
-
           <button
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="transferenciaForm.invalid"
           >
             Realizar transferencia
           </button>
-
         </div>
-
       </form>
-
     </mat-card-content>
-
   </mat-card>
-
 </div>

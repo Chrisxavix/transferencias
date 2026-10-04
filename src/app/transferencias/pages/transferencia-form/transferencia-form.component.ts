@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import { transferencia } from '../../../cuentas/dashboard/interfaces/transferencia';
 import { leadsMock } from '../../../cuentas/dashboard/mock/transferencias';
@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsService } from '../../../utils/notifications.service';
 import { Router } from '@angular/router';
+import { CuentasTodasService } from '../../services/cuentas_todas.service';
+import { CTL } from '../../interfaces/CuentasTodasRespuesta';
 
 @Component({
   selector: 'app-transferencia-form',
@@ -28,34 +30,70 @@ import { Router } from '@angular/router';
   templateUrl: './transferencia-form.component.html',
   styleUrl: './transferencia-form.component.css'
 })
-export class TransferenciaFormComponent {
+export class TransferenciaFormComponent implements OnInit {
 
-cuentas: transferencia[] = leadsMock;
+  // cuentas: transferencia[] = leadsMock;
+
+  cuentas: CTL[] = [];
 
   transferenciaForm: FormGroup;
+  private cuentasTodasService = inject(CuentasTodasService);
 
   constructor(
     private fb: FormBuilder,
     private notificationService: NotificationsService,
     private router: Router,
   ) {
-    this.transferenciaForm = this.fb.group(
-      {
-        cuentaOrigen: ['', Validators.required],
-        cuentaDestino: ['', Validators.required],
-        monto: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(/^\d+(\.\d+)?$/),
-            Validators.min(0.01)
-          ]
+    this.transferenciaForm = this.fb.group({
+      cuentaOrigen: ['', Validators.required],
+      cuentaDestino: ['', Validators.required],
+      monto: [
+        '',
+        [
+          Validators.required,
+          Validators.min(0.01)
         ]
-      },
-      {
-        validators: this.cuentasDiferentesValidator
-      }
+      ]
+    });
+
+    // Cuando cambia la cuenta origen
+    this.transferenciaForm
+      .get('cuentaOrigen')
+      ?.valueChanges
+      .subscribe(numeroCuenta => {
+        const cuenta = this.cuentas.find(
+          c => c.numeroCuenta === numeroCuenta
+        )
+        const montoControl = this.transferenciaForm.get('monto');
+        if (cuenta) {
+          montoControl?.setValidators([
+            Validators.required,
+            Validators.min(0.01),
+            Validators.max(Number(cuenta.saldo))
+          ]);
+        } else {
+          montoControl?.setValidators([
+            Validators.required,
+            Validators.min(0.01)
+          ]);
+        }
+        montoControl?.updateValueAndValidity();
+      });
+  }
+
+  ngOnInit(): void {
+    this.obtenerTodasCuentas();
+  }
+
+  obtenerSaldoCuentaOrigen(): number {
+    const numeroCuenta =
+      this.transferenciaForm.get('cuentaOrigen')?.value;
+
+    const cuenta = this.cuentas.find(
+      c => c.numeroCuenta === numeroCuenta
     );
+
+    return Number(cuenta?.saldo ?? 0);
   }
 
   cuentasDiferentesValidator(form: AbstractControl): ValidationErrors | null {
@@ -82,5 +120,17 @@ cuentas: transferencia[] = leadsMock;
     this.router.navigate(['/home']);
 
     // Aquí posteriormente llamarías al backend
+  }
+
+  obtenerTodasCuentas(): void {
+    this.cuentasTodasService.obtenerTodasCuentas().subscribe({
+      next: (respuesta) => {
+        console.log('Respuesta API:', respuesta);
+        this.cuentas = respuesta.ctl;
+      },
+      error: (error) => {
+        console.error('Error al obtener cuentas:', error);
+      }
+    });
   }
 }
