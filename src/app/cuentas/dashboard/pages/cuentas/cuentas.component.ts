@@ -4,14 +4,11 @@ import { transferencia } from '../../interfaces/transferencia';
 import { leadsMock } from '../../mock/transferencias';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { RouterOutlet } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-cuentas',
   imports: [
-    RouterOutlet,
-    CuentasComponent,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,

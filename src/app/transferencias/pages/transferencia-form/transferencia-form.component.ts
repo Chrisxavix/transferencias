@@ -8,6 +8,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationsService } from '../../../utils/notifications.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transferencia-form',
@@ -19,7 +22,8 @@ import { MatInputModule } from '@angular/material/input';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
 ],
   templateUrl: './transferencia-form.component.html',
   styleUrl: './transferencia-form.component.css'
@@ -30,8 +34,11 @@ cuentas: transferencia[] = leadsMock;
 
   transferenciaForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationsService,
+    private router: Router,
+  ) {
     this.transferenciaForm = this.fb.group(
       {
         cuentaOrigen: ['', Validators.required],
@@ -51,32 +58,28 @@ cuentas: transferencia[] = leadsMock;
     );
   }
 
-  cuentasDiferentesValidator(
-    form: AbstractControl
-  ): ValidationErrors | null {
-
+  cuentasDiferentesValidator(form: AbstractControl): ValidationErrors | null {
     const origen = form.get('cuentaOrigen')?.value;
     const destino = form.get('cuentaDestino')?.value;
-
     if (origen && destino && origen === destino) {
       return {
         cuentasIguales: true
       };
     }
-
     return null;
   }
 
   enviarTransferencia(): void {
-
     if (this.transferenciaForm.invalid) {
       this.transferenciaForm.markAllAsTouched();
       return;
     }
-
     const transferencia = this.transferenciaForm.value;
-
     console.log('Transferencia:', transferencia);
+    this.notificationService.success(
+      'Transferencia realizada correctamente'
+    );
+    this.router.navigate(['/home']);
 
     // Aquí posteriormente llamarías al backend
   }
