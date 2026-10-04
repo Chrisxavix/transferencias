@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { CuentasComponent } from './cuentas/dashboard/pages/cuentas/cuentas.component';
 
 export const routes: Routes = [
   {
@@ -14,11 +15,9 @@ export const routes: Routes = [
     path: 'cuentas',
     loadComponent: () =>
       import('./cuentas/dashboard/pages/cuentas/cuentas.component').then(m => m.CuentasComponent)
+  },
+  {
+    path: 'transferencias',
+    loadComponent: () => import('./transferencias/pages/transferencia-form/transferencia-form.component').then(m => m.TransferenciaFormComponent)
   }
-  // {
-  //   path: 'cuentas',
-  //   loadComponent: () =>
-  //     import('./pages/cuentas/cuentas.component')
-  //       .then(m => m.CuentasComponent)
-  // }
 ];
